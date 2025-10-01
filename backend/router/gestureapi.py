@@ -37,4 +37,5 @@ async def predict(data: Data):
         for lms, hd in zip(results.multi_hand_landmarks, results.multi_handedness):
             label = hd.classification[0].label
             gesture = detect_state(lms.landmark, label)
+    print(gesture)
     return {"gesture": gesture}
