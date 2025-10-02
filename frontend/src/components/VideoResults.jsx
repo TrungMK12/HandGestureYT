@@ -56,7 +56,7 @@ const VideoResults = ({ results, onVideoSelect, isLoading, searchQuery, showTren
                     <div className="video-player-container">
                         <div className="video-iframe-wrapper">
                             <iframe
-                                src={`https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1&rel=0`}
+                                src={`https://www.youtube.com/embed/${selectedVideo.id}?autoplay=1&rel=0&enablejsapi=1&origin=${window.location.origin}`}
                                 title={selectedVideo.title}
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://127.0.0.1:8000/gestureapi'
+const BASE_URL = 'https://handgestureyt-production.up.railway.app/gestureapi'
 
 const api = axios.create({
     baseURL: BASE_URL,

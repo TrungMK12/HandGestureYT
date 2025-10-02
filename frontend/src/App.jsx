@@ -13,6 +13,10 @@ function App() {
   const [searchQuery, setSearchQuery] = useState("")
   const [currentMode, setCurrentMode] = useState("trending")
   const [currentCategory, setCurrentCategory] = useState(null)
+  const [isProcessingGesture, setIsProcessingGesture] = useState(false)
+  const [isVideoPaused, setIsVideoPaused] = useState(false)
+  const [isVideoMuted, setIsVideoMuted] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const {
     isLoading,
@@ -31,6 +35,33 @@ function App() {
     setCurrentMode("trending")
     getTrendingVideos('VN', 10)
   }, [getTrendingVideos])
+
+  useEffect(() => {
+    if (currentVideo) {
+      setIsVideoPaused(false)
+      setIsVideoMuted(false)
+      setIsFullscreen(false)
+    }
+  }, [currentVideo])
+
+  // Listen for fullscreen changes
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange)
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange)
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange)
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange)
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange)
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange)
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange)
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange)
+    }
+  }, [])
 
   const searchVideos = async (query) => {
     setSearchQuery(query)
@@ -51,7 +82,7 @@ function App() {
 
   const handleGestureDetected = (gesture) => {
     setDetectedGesture(gesture)
-    setTimeout(() => setDetectedGesture(""), 2000)
+    setTimeout(() => setDetectedGesture(""), 3000)
   }
 
   const handleRetryConnection = async () => {
@@ -69,50 +100,100 @@ function App() {
     }
   }
 
-  const handleVideoControl = (action, gesture) => {
-    console.log(`Gesture ${gesture} detected, performing action: ${action}`)
+  const handleVideoControl = (gesture) => {
+    if (isProcessingGesture) {
+      return
+    }
+
+    console.log(`Gesture ${gesture} detected`)
+
     if (!currentVideo) {
       console.log("No video is currently selected")
       return
     }
-    switch (action) {
-      case 'play_pause':
+
+    setIsProcessingGesture(true)
+
+    switch (gesture) {
+      case 'fist':
         const iframe = document.querySelector('.video-iframe')
         if (iframe) {
-          iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
-        }
-        console.log("Play/Pause video")
-        break
-      case 'fullscreen':
-        const videoWrapper = document.querySelector('.video-iframe-wrapper')
-        if (videoWrapper) {
-          if (document.fullscreenElement) {
-            document.exitFullscreen()
+          if (isVideoPaused) {
+            iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*')
+            setIsVideoPaused(false)
+            console.log("Play video")
           } else {
-            videoWrapper.requestFullscreen()
+            iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*')
+            setIsVideoPaused(true)
+            console.log("Pause video")
           }
         }
-        console.log("Toggle fullscreen")
         break
-      case 'next_video':
+      case 'palm':
+        const videoWrapper = document.querySelector('.video-iframe-wrapper')
+        if (videoWrapper) {
+          try {
+            if (isFullscreen || document.fullscreenElement) {
+              if (document.exitFullscreen) {
+                document.exitFullscreen()
+              } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen()
+              } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen()
+              } else if (document.msExitFullscreen) {
+                document.msExitFullscreen()
+              }
+              console.log("Exit fullscreen")
+            } else {
+              if (videoWrapper.requestFullscreen) {
+                videoWrapper.requestFullscreen()
+              } else if (videoWrapper.webkitRequestFullscreen) {
+                videoWrapper.webkitRequestFullscreen()
+              } else if (videoWrapper.mozRequestFullScreen) {
+                videoWrapper.mozRequestFullScreen()
+              } else if (videoWrapper.msRequestFullscreen) {
+                videoWrapper.msRequestFullscreen()
+              }
+              console.log("Enter fullscreen")
+            }
+          } catch (error) {
+            console.error("Fullscreen error:", error)
+            setIsFullscreen(!isFullscreen)
+          }
+        }
+        break
+      case 'point':
         const results = searchResults.length > 0 ? searchResults : trendingVideos
         if (results.length > 0) {
           const currentIndex = results.findIndex(v => v.id === currentVideo.id)
           const nextIndex = (currentIndex + 1) % results.length
           selectVideo(results[nextIndex])
+          setIsVideoPaused(false)
+          setIsFullscreen(false)
+          console.log("Next video")
         }
-        console.log("Next video")
         break
-      case 'volume_toggle':
+      case 'pinch':
         const iframeElement = document.querySelector('.video-iframe')
         if (iframeElement) {
-          iframeElement.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*')
+          if (isVideoMuted) {
+            iframeElement.contentWindow.postMessage('{"event":"command","func":"unMute","args":""}', '*')
+            setIsVideoMuted(false)
+            console.log("Unmute video")
+          } else {
+            iframeElement.contentWindow.postMessage('{"event":"command","func":"mute","args":""}', '*')
+            setIsVideoMuted(true)
+            console.log("Mute video")
+          }
         }
-        console.log("Toggle mute")
         break
       default:
-        console.log(`Unknown action: ${action}`)
+        console.log(`Unknown gesture: ${gesture}`)
     }
+
+    setTimeout(() => {
+      setIsProcessingGesture(false)
+    }, 3000)
   }
 
   return (

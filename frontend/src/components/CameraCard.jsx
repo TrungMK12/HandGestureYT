@@ -17,10 +17,10 @@ const CameraCard = ({ isActive, onToggle, detectedGesture, onGestureDetected, on
     } = useGestureRecognition()
 
     const gestureActions = {
-        'fist': { action: 'play_pause', emoji: '✊', description: 'Phát/Tạm dừng' },
-        'palm': { action: 'fullscreen', emoji: '✋', description: 'Toàn màn hình' },
-        'point': { action: 'next_video', emoji: '☝️', description: 'Video tiếp theo' },
-        'pinch': { action: 'volume_toggle', emoji: '🤏', description: 'Bật/tắt âm thanh' }
+        'fist': { emoji: '✊', description: 'Dừng phát' },
+        'palm': { emoji: '✋', description: 'Phóng to/Thu nhỏ' },
+        'point': { emoji: '☝️', description: 'Video tiếp theo' },
+        'pinch': { emoji: '🤏', description: 'Tắt âm/Bật âm' }
     }
 
     useEffect(() => {
@@ -29,8 +29,7 @@ const CameraCard = ({ isActive, onToggle, detectedGesture, onGestureDetected, on
                 onGestureDetected(currentGesture)
             }
             if (onVideoControl && gestureActions[currentGesture]) {
-                const action = gestureActions[currentGesture].action
-                onVideoControl(action, currentGesture)
+                onVideoControl(currentGesture)
             }
         }
     }, [currentGesture, onGestureDetected, onVideoControl])

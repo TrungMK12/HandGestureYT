@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://127.0.0.1:8000/youtubeapi'
+const BASE_URL = 'https://handgestureyt-production.up.railway.app/youtubeapi'
 
 const api = axios.create({
     baseURL: BASE_URL

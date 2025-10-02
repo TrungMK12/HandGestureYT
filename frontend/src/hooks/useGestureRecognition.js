@@ -12,7 +12,7 @@ export const useGestureRecognition = () => {
     const videoRef = useRef(null)
 
     const maxRetries = 3
-    const interval = 1000
+    const interval = 3000
     const autoStart = true
 
     const checkConnectioned = useCallback(async () => {
