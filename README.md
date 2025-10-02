@@ -17,10 +17,10 @@ HandGestureYT là một ứng dụng web full-stack cho phép người dùng đi
 
 ### 🎮 Các cử chỉ được hỗ trợ
 
-- **Nắm tay (fist)**: Dừng/Tạm dừng
-- **Chỉ (point)**: Chọn/Click
-- **Véo (pinch)**: Zoom/Focus
-- **Bàn tay mở (palm)**: Dừng/Reset
+- **Nắm tay (fist)**: Dừng phát/Phát
+- **Chỉ (point)**: Video tiếp theo
+- **Véo (pinch)**: Tắt âm/Bật âm
+- **Bàn tay mở (palm)**: Phóng to/Thu nhỏ
 - **Không xác định (unknown)**: Trạng thái chờ
 
 ## 🏗️ Kiến trúc hệ thống
@@ -41,38 +41,39 @@ HandGestureYT là một ứng dụng web full-stack cho phép người dùng đi
 
 ```
 HandGestureYT/
-├── backend/                    # Python FastAPI backend
+├── backend/                    
 │   ├── __init__.py
-│   ├── main.py                # Entry point, CORS setup
-│   ├── config.py              # Environment configuration
-│   ├── detect.py              # Hand gesture detection logic
-│   ├── model.py               # Pydantic models
-│   └── router/                # API routes
-│       ├── gestureapi.py      # Gesture recognition endpoints
-│       └── youtubeapi.py      # YouTube API endpoints
-├── frontend/                  # React frontend
-│   ├── public/                # Static assets
+│   ├── main.py               
+│   ├── config.py              
+│   ├── detect.py              
+│   ├── model.py               
+│   └── router/               
+│       ├── __init__.py
+│       ├── gestureapi.py      
+│       └── youtubeapi.py      
+├── frontend/                  
+│   ├── public/               
 │   ├── src/
-│   │   ├── components/        # React components
+│   │   ├── components/        
 │   │   │   ├── CameraCard.jsx
 │   │   │   ├── CategorySelector.jsx
 │   │   │   ├── CurrentVideo.jsx
 │   │   │   ├── Header.jsx
 │   │   │   ├── SearchVideos.jsx
 │   │   │   └── VideoResults.jsx
-│   │   ├── hooks/             # Custom React hooks
+│   │   ├── hooks/             
 │   │   │   ├── useGestureRecognition.js
 │   │   │   └── useYouTube.js
-│   │   ├── services/          # API service layers
+│   │   ├── services/        
 │   │   │   ├── gestureApi.js
 │   │   │   └── youtubeApi.js
-│   │   ├── App.jsx            # Main App component
-│   │   └── main.jsx           # React entry point
-│   ├── package.json           # Dependencies
-│   └── vite.config.js         # Vite configuration
-├── requirements.txt           # Python dependencies
-├── runtime.txt               # Python version
-└── README.md                 # Tài liệu dự án
+│   │   ├── App.jsx            
+│   │   └── main.jsx           
+│   ├── package.json          
+│   └── vite.config.js        
+├── requirements.txt          
+├── runtime.txt               
+└── README.md                
 ```
 
 ## 🚀 Cài đặt và chạy
@@ -183,66 +184,9 @@ npm run dev
 - **Pillow (PIL)**: Image processing
 - **Custom gesture detection**: Logic nhận dạng cử chỉ tay
 
-## 🔧 Development
-
-### Chạy tests
-```bash
-# Backend
-cd backend
-python -m pytest
-
-# Frontend
-cd frontend
-npm test
-```
-
-### Build production
-```bash
-# Frontend build
-cd frontend
-npm run build
-
-# Preview production build
-npm run preview
-```
-
-### Linting
-```bash
-cd frontend
-npm run lint
-```
-
-## 🤝 Đóng góp
-
-1. Fork repository
-2. Tạo feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Mở Pull Request
-
-## 📝 License
-
-Dự án này sử dụng MIT License. Xem file `LICENSE` để biết thêm chi tiết.
-
-## 👨‍💻 Tác giả
-
-**TrungMK12** - [GitHub Profile](https://github.com/TrungMK12)
-
-## 🙏 Ghi nhận
-
-- [MediaPipe](https://mediapipe.dev/) - Hand tracking solution
-- [YouTube Data API](https://developers.google.com/youtube/v3) - Video data và metadata
-- [FastAPI](https://fastapi.tiangolo.com/) - Modern Python web framework
-- [React](https://react.dev/) - UI library
-- [Vite](https://vitejs.dev/) - Build tool
-
 ## ⚠️ Lưu ý
 
 - Cần có YouTube API key để sử dụng tính năng YouTube
 - Webcam cần được cấp quyền truy cập
 - Hiệu suất nhận dạng cử chỉ phụ thuộc vào điều kiện ánh sáng
 - Khuyến nghị sử dụng Chrome/Firefox để có trải nghiệm tốt nhất
-
----
-
-**Enjoy controlling YouTube with your hands! 🖐️📺**
