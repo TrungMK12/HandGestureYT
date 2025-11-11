@@ -17,7 +17,7 @@ const CameraCard = ({ isActive, onToggle, detectedGesture, onGestureDetected, on
     } = useGestureRecognition()
 
     const gestureActions = {
-        'fist': { emoji: '✊', description: 'Dừng phát' },
+        'fist': { emoji: '✊', description: 'Dừng phát/Phát' },
         'palm': { emoji: '✋', description: 'Phóng to/Thu nhỏ' },
         'point': { emoji: '☝️', description: 'Video tiếp theo' },
         'pinch': { emoji: '🤏', description: 'Tắt âm/Bật âm' }
